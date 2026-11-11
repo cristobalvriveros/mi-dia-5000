@@ -4,136 +4,191 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#176b4a">
-<meta name="description" content="Control sencillo de gastos diarios con presupuesto de $5.000.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
+<meta name="description" content="Control personal de gastos diarios con presupuesto de $5.000 y días especiales.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
 <title>Mi Día $5.000</title>
 <style>
-:root{--green:#176b4a;--green2:#e3f3ea;--red:#b83232;--redbg:#fdeaea;--ink:#1d2923;--muted:#718078;--line:#e5ebe7;--paper:#fff;--bg:#f4f7f5}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{background:var(--green);color:white;padding:22px 18px 18px;border-radius:0 0 22px 22px}
-.headrow{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-size:20px;font-weight:750;letter-spacing:-.4px}.sub{font-size:12px;opacity:.8;margin-top:3px}
-main{max-width:680px;margin:auto;padding:14px 14px 96px}
-.summary{background:white;border:1px solid var(--line);border-radius:18px;padding:17px;margin-top:-2px;box-shadow:0 5px 20px #173b2810}
-.label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.7px;text-transform:uppercase}
-.amount{font-size:34px;font-weight:800;letter-spacing:-1px;margin:3px 0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.small{font-size:13px;color:var(--muted)}
-.track{height:9px;background:#edf1ee;border-radius:99px;overflow:hidden;margin:12px 0 8px}.fill{height:100%;background:#279566;border-radius:99px;width:0;transition:width .2s}.fill.over{background:var(--red)}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:16px 0}
-.tab{border:1px solid var(--line);background:white;border-radius:12px;padding:11px 6px;color:var(--muted);font-weight:650;font-size:13px}
-.tab.active{background:var(--green2);color:var(--green);border-color:#b9ddc8}
-.panel{display:none}.panel.active{display:block}
-.card{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:12px}
-.monthnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.monthnav strong{font-size:16px}
-.iconbtn{border:1px solid var(--line);background:white;border-radius:10px;width:36px;height:34px;font-size:19px;color:var(--green)}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.weekday{text-align:center;color:var(--muted);font-size:11px;font-weight:700;padding:5px 0}
-.day{min-height:59px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:5px 2px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-.day .num{font-size:13px;font-weight:700}.day .spent{font-size:9px;color:var(--muted);white-space:nowrap}
-.day.ok{background:#eaf6ef;border-color:#d1eadb}.day.over{background:var(--redbg);border-color:#f5d0d0}.day.special{outline:2px solid #d6b45b;outline-offset:-2px}
-.day.selected{box-shadow:inset 0 0 0 2px var(--green)}.day.today .num{color:var(--green)}
-.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--muted)}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.green{background:#279566}.red{background:var(--red)}.gold{background:#d6b45b}
-.sectiontitle{font-weight:750;font-size:16px;margin:0 0 12px}
-input,button{font:inherit}input[type=number],input[type=text],input[type=date]{width:100%;padding:12px;border:1px solid #dce5df;border-radius:11px;background:#fff;color:var(--ink);outline:none}
-input:focus{border-color:var(--green);box-shadow:0 0 0 3px #176b4a18}
-.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
-.primary{width:100%;background:var(--green);color:white;border:0;border-radius:12px;padding:13px;font-weight:750;margin-top:8px}
-.secondary{background:#edf4ef;color:var(--green);border:0;border-radius:10px;padding:9px 12px;font-weight:650}
-.danger{background:#fff0f0;color:var(--red);border:0;border-radius:9px;padding:7px 10px;font-size:12px}
-.expense{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);gap:8px}.expense:last-child{border-bottom:0}
-.expense strong{font-size:14px}.expense small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
-.statsgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{background:#f7faf8;border-radius:13px;padding:13px}.stat b{font-size:21px;display:block;margin-top:4px}
-.empty{text-align:center;color:var(--muted);font-size:13px;padding:20px 8px}
-.notice{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
-nav.bottom{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:center}
-nav.bottom span{font-size:11px;color:var(--muted);text-align:center;max-width:680px;width:100%}
-@media(min-width:600px){main{padding-top:22px}.day{min-height:68px}.day .spent{font-size:10px}}
+:root{--green:#176b4a;--green2:#e5f3ea;--ink:#183128;--muted:#718078;--line:#dce7df;--bg:#f4f7f4;--red:#b64040}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--green);color:white;padding:22px 18px 24px;border-radius:0 0 22px 22px}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{font-size:22px;margin:0;font-weight:800}
+header p{margin:5px 0 0;font-size:13px;opacity:.88}
+main{max-width:680px;margin:0 auto;padding:14px 14px 40px}
+.summary{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:-8px;box-shadow:0 4px 14px #173b2510}
+.label{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.04em}
+.amount{font-size:32px;font-weight:850;letter-spacing:-1px;margin:3px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.track{height:9px;background:#edf2ee;border-radius:20px;overflow:hidden;margin:12px 0 7px}
+.fill{height:100%;background:var(--green);width:0%;border-radius:20px;transition:width .2s}
+.over{background:var(--red)}
+.small{font-size:12px;color:var(--muted)}
+.monthnav{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 12px}
+.monthnav strong{font-size:17px;text-transform:capitalize}
+button{font:inherit;cursor:pointer}
+.iconbtn,.secondary,.primary,.danger{border:1px solid var(--line);border-radius:12px;padding:10px 13px;background:white;color:var(--ink)}
+.iconbtn{font-size:20px;min-width:42px}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday{text-align:center;color:var(--muted);font-size:11px;padding:5px 0;font-weight:700}
+.day{min-height:63px;border:1px solid var(--line);border-radius:11px;background:white;padding:6px 3px;text-align:center;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px}
+.day.empty{visibility:hidden}
+.day.selected{outline:2px solid var(--green);border-color:var(--green)}
+.day.today .num{color:var(--green);text-decoration:underline}
+.day.special{background:#fff8e8;border-color:#ead39b}
+.num{font-weight:750;font-size:13px}
+.daytotal{font-size:9px;color:var(--muted);white-space:nowrap}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 2px 18px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;margin-top:13px}
+.panel h2{font-size:16px;margin:0 0 12px}
+input{font:inherit;width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff;color:var(--ink);min-width:0}
+.field{display:grid;gap:6px;margin:10px 0}
+.field label{font-size:12px;color:var(--muted);font-weight:650}
+.primary{background:var(--green);border-color:var(--green);color:white;font-weight:750}
+.secondary{background:white}
+.danger{color:var(--red);background:white}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.expense{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);gap:10px}
+.expense:first-child{border-top:0}
+.expense strong{white-space:nowrap}
+.emptymsg{font-size:13px;color:var(--muted);padding:8px 0}
+.specialbox{background:#fff8e8;border:1px solid #ead39b;border-radius:12px;padding:12px;margin-top:10px}
+.specialbox label{font-size:13px;font-weight:650}
+.note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:12px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:22px 0}
+@media(min-width:520px){.day{min-height:76px}.daytotal{font-size:10px}}
 </style>
 </head>
 <body>
-<header><div class="headrow"><div><div class="brand">🌿 Mi Día $5.000</div><div class="sub">Tus gastos, claros y bajo control</div></div><div style="font-size:12px;opacity:.9">CLP · Diario</div></div></header>
+<header>
+ <div class="headrow"><div><h1>Mi Día $5.000</h1><p>Un día a la vez. Lleva tus gastos con calma.</p></div><span aria-hidden="true" style="font-size:28px">🌿</span></div>
+</header>
 <main>
-<section class="summary">
- <div class="label" id="summary-date">GASTADO HOY</div>
- <div class="amount" id="today-spent">$0</div>
- <div class="row"><span class="small" id="budget-label">Presupuesto: $5.000</span><strong class="small" id="remaining">$5.000 disponibles</strong></div>
- <div class="track"><div class="fill" id="progress"></div></div>
- <div class="row"><span class="small" id="usage">0% utilizado</span><span class="small" id="budget-kind">Presupuesto diario</span></div>
-</section>
-<div class="tabs">
- <button class="tab active" data-tab="calendar">▦ Calendario</button>
- <button class="tab" data-tab="entry">＋ Registrar</button>
- <button class="tab" data-tab="stats">▥ Estadísticas</button>
-</div>
-<section class="panel active" id="calendar">
- <div class="card">
-  <div class="monthnav"><button class="iconbtn" id="prev">‹</button><strong id="month-title"></strong><button class="iconbtn" id="next">›</button></div>
-  <div class="calendar" id="calendar-grid"></div>
-  <div class="legend"><span><i class="dot green"></i>Dentro del límite</span><span><i class="dot red"></i>Excedido</span><span><i class="dot gold"></i>Día especial</span></div>
+ <section class="summary" aria-live="polite">
+  <div class="row"><span class="label" id="selectedLabel">Gasto del día</span><span class="small" id="budgetType">Presupuesto diario</span></div>
+  <div class="amount" id="spent">$0</div>
+  <div class="row small"><span id="remaining">$5.000 disponibles</span><strong id="budgetText">de $5.000</strong></div>
+  <div class="track"><div class="fill" id="progress"></div></div>
+  <div class="small" id="status">Vas dentro de tu presupuesto.</div>
+ </section>
+
+ <div class="monthnav">
+  <button class="iconbtn" id="prev" aria-label="Mes anterior">‹</button>
+  <strong id="monthTitle"></strong>
+  <button class="iconbtn" id="next" aria-label="Mes siguiente">›</button>
  </div>
- <div class="card">
-  <div class="row"><div><div class="sectiontitle" id="selected-title">Gastos del día</div><div class="small" id="selected-budget"></div></div><button class="secondary" id="quick-add">＋ Agregar</button></div>
-  <div id="day-expenses"></div>
- </div>
-</section>
-<section class="panel" id="entry">
- <div class="card">
-  <h2 class="sectiontitle">Registrar un gasto</h2>
-  <div class="field"><label for="expense-date">Fecha</label><input type="date" id="expense-date"></div>
-  <div class="field"><label for="expense-amount">Monto (CLP)</label><input type="number" id="expense-amount" min="1" step="1" inputmode="numeric" placeholder="Ej. 2500"></div>
-  <div class="field"><label for="expense-note">Descripción (opcional)</label><input type="text" id="expense-note" maxlength="60" placeholder="Ej. Almuerzo, transporte..."></div>
-  <button class="primary" id="save-expense">Guardar gasto</button>
- </div>
- <div class="card">
-  <h2 class="sectiontitle">Día especial</h2>
-  <p class="small">Puedes asignar un presupuesto distinto a una fecha específica. Los demás días mantienen los $5.000.</p>
-  <div class="field"><label for="special-date">Fecha especial</label><input type="date" id="special-date"></div>
-  <div class="field"><label for="special-budget">Presupuesto para ese día (CLP)</label><input type="number" id="special-budget" min="0" step="1" inputmode="numeric" placeholder="Ej. 15000"></div>
-  <button class="primary" id="save-special">Guardar presupuesto especial</button>
-  <button class="secondary" id="remove-special" style="width:100%;margin-top:8px">Quitar presupuesto especial</button>
- </div>
-</section>
-<section class="panel" id="stats">
- <div class="card">
-  <h2 class="sectiontitle">Resumen del mes</h2>
-  <div class="statsgrid">
-   <div class="stat"><span class="label">Total gastado</span><b id="stat-total">$0</b></div>
-   <div class="stat"><span class="label">Promedio diario</span><b id="stat-average">$0</b></div>
-   <div class="stat"><span class="label">Días dentro del límite</span><b id="stat-good">0</b></div>
-   <div class="stat"><span class="label">Días excedidos</span><b id="stat-over">0</b></div>
+ <div class="calendar" id="calendar"></div>
+ <div class="legend"><span>🟢 Día normal</span><span>🟡 Día especial</span><span>✓ Día seleccionado</span></div>
+
+ <section class="panel">
+  <h2 id="dayTitle">Gastos del día</h2>
+  <div id="expenseList" class="emptymsg">Todavía no registras gastos.</div>
+  <div class="field"><label for="description">¿En qué gastaste?</label><input id="description" maxlength="60" placeholder="Ej. Café, transporte, almuerzo"></div>
+  <div class="field"><label for="amountInput">Monto (CLP)</label><input id="amountInput" type="number" inputmode="numeric" min="1" step="1" placeholder="Ej. 2500"></div>
+  <div class="actions"><button class="primary" id="addExpense">Agregar gasto</button></div>
+ </section>
+
+ <section class="panel">
+  <h2>Presupuesto de este día</h2>
+  <div class="small">Cada día comienza con $5.000. Puedes asignar un presupuesto distinto a una fecha especial.</div>
+  <div class="specialbox">
+   <label><input type="checkbox" id="specialToggle" style="width:auto;vertical-align:middle"> Marcar como día especial</label>
+   <div class="field" id="specialBudgetField" hidden><label for="specialBudget">Presupuesto especial (CLP)</label><input id="specialBudget" type="number" inputmode="numeric" min="0" step="1" placeholder="Ej. 15000"></div>
+   <div class="actions"><button class="secondary" id="saveBudget">Guardar presupuesto</button><button class="danger" id="clearSpecial">Quitar día especial</button></div>
   </div>
-  <p class="notice">El promedio considera los días del mes transcurridos, incluido hoy. Los días sin gastos cuentan como $0. Los presupuestos especiales se consideran al evaluar cada fecha.</p>
- </div>
-</section>
-<div class="notice">Tus registros se guardan en este dispositivo. Si borras los datos del navegador o cambias de teléfono, podrías perderlos. Esta versión no se conecta a bancos.</div>
+  <div class="note">Los gastos y presupuestos se guardan en este teléfono. El presupuesto de $5.000 se aplica automáticamente a cada fecha nueva; los días especiales conservan el monto que les asignes.</div>
+ </section>
+ <section class="panel">
+  <h2>Respaldo de tus datos</h2>
+  <div class="small">Descarga una copia de tus gastos y presupuestos para conservarla.</div>
+  <div class="actions"><button class="secondary" id="exportData">Exportar respaldo</button><button class="secondary" id="importButton">Importar respaldo</button><input type="file" id="importFile" accept="application/json,.json" hidden></div>
+ </section>
+ <footer>Mi Día $5.000 · Tus datos permanecen en tu dispositivo.</footer>
 </main>
-<nav class="bottom"><span>Un día a la vez · El presupuesto vuelve a $5.000 cada día</span></nav>
 <script>
-const KEY='mi-dia-5000-v1';
-const defaultData=()=>({expenses:{},special:{}});
-let data;try{data=JSON.parse(localStorage.getItem(KEY))||defaultData()}catch(e){data=defaultData()}
-let selected=iso(new Date()), view=new Date(); view.setDate(1);
+(function(){
+'use strict';
+const DAILY_BUDGET=5000, STORAGE_KEY='mi-dia-5000-v2';
 const $=id=>document.getElementById(id);
-function iso(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
-function parseDate(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
-function money(n){return '$'+Math.round(n||0).toLocaleString('es-CL')}
-function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
-function total(day){return (data.expenses[day]||[]).reduce((s,x)=>s+Number(x.amount),0)}
-function budget(day){return Object.prototype.hasOwnProperty.call(data.special,day)?Number(data.special[day]):5000}
-function dayName(s){return parseDate(s).toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'})}
-function renderSummary(){const t=total(selected),b=budget(selected),left=b-t,pct=b>0?t/b*100:(t>0?100:0);$('summary-date').textContent=selected===iso(new Date())?'GASTADO HOY':'GASTADO · '+dayName(selected).toUpperCase();$('today-spent').textContent=money(t);$('budget-label').textContent='Presupuesto: '+money(b);$('remaining').textContent=left>=0?money(left)+' disponibles':money(-left)+' sobre el límite';$('remaining').style.color=left<0?'var(--red)':'var(--green)';$('progress').style.width=Math.min(100,pct)+'%';$('progress').classList.toggle('over',t>b);$('usage').textContent=Math.round(pct)+'% utilizado';$('budget-kind').textContent=selected in data.special?'Día especial':'Presupuesto diario'}
-function renderCalendar(){const y=view.getFullYear(),m=view.getMonth();$('month-title').textContent=view.toLocaleDateString('es-CL',{month:'long',year:'numeric'});const grid=$('calendar-grid');grid.innerHTML='';['L','M','M','J','V','S','D'].forEach(x=>{const e=document.createElement('div');e.className='weekday';e.textContent=x;grid.append(e)});let offset=(new Date(y,m,1).getDay()+6)%7;for(let i=0;i<offset;i++){const e=document.createElement('div');grid.append(e)}const count=new Date(y,m+1,0).getDate();for(let n=1;n<=count;n++){const d=iso(new Date(y,m,n)),t=total(d),b=budget(d),e=document.createElement('button');e.className='day'+(t>b?' over':t>0?' ok':'')+(d===selected?' selected':'')+(d===iso(new Date())?' today':'')+(d in data.special?' special':'');e.innerHTML='<span class="num">'+n+'</span><span class="spent">'+(t?money(t):'—')+'</span>';e.setAttribute('aria-label',dayName(d)+', '+money(t));e.addEventListener('click',()=>{selected=d;render()});grid.append(e)}}
-function renderDay(){const t=total(selected),b=budget(selected);$('selected-title').textContent=dayName(selected);$('selected-budget').textContent='Total: '+money(t)+' · Límite: '+money(b)+(selected in data.special?' · Especial':'');const box=$('day-expenses');box.innerHTML='';const list=data.expenses[selected]||[];if(!list.length){box.innerHTML='<div class="empty">Todavía no hay gastos registrados para este día.</div>';return}list.forEach((x,i)=>{const el=document.createElement('div');el.className='expense';const left=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small'),right=document.createElement('div'),del=document.createElement('button');strong.textContent=x.note||'Gasto';small.textContent='Movimiento '+(i+1);left.append(strong,small);right.style.display='flex';right.style.alignItems='center';right.style.gap='8px';const val=document.createElement('b');val.textContent=money(x.amount);del.className='danger';del.textContent='Eliminar';del.onclick=()=>{if(confirm('¿Eliminar este gasto?')){data.expenses[selected].splice(i,1);if(!data.expenses[selected].length)delete data.expenses[selected];save()}};right.append(val,del);el.append(left,right);box.append(el)})}
-function renderStats(){const y=view.getFullYear(),m=view.getMonth(),days=new Date(y,m+1,0).getDate(),elapsed=(y===new Date().getFullYear()&&m===new Date().getMonth())?new Date().getDate():days;let sum=0,good=0,over=0;for(let n=1;n<=days;n++){const d=iso(new Date(y,m,n)),t=total(d);sum+=t;if(n<=elapsed){if(t<=budget(d))good++;else over++}}$('stat-total').textContent=money(sum);$('stat-average').textContent=money(sum/Math.max(1,elapsed));$('stat-good').textContent=good;$('stat-over').textContent=over}
-function render(){renderSummary();renderCalendar();renderDay();renderStats();$('expense-date').value=selected;$('special-date').value=selected}
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')}));
-$('prev').onclick=()=>{view.setMonth(view.getMonth()-1);render()};$('next').onclick=()=>{view.setMonth(view.getMonth()+1);render()};
-$('quick-add').onclick=()=>{document.querySelector('[data-tab="entry"]').click();$('expense-date').value=selected;$('expense-amount').focus()};
-$('save-expense').onclick=()=>{const d=$('expense-date').value,a=Number($('expense-amount').value),note=$('expense-note').value.trim();if(!d||!Number.isFinite(a)||a<=0){alert('Ingresa una fecha y un monto mayor que $0.');return}data.expenses[d]=data.expenses[d]||[];data.expenses[d].push({amount:Math.round(a),note});selected=d;view=parseDate(d);view.setDate(1);$('expense-amount').value='';$('expense-note').value='';save();document.querySelector('[data-tab="calendar"]').click();alert('Gasto guardado. ¡Listo!')};
-$('save-special').onclick=()=>{const d=$('special-date').value,b=Number($('special-budget').value);if(!d||!Number.isFinite(b)||b<0||$('special-budget').value===''){alert('Ingresa una fecha y un presupuesto válido.');return}data.special[d]=Math.round(b);selected=d;view=parseDate(d);view.setDate(1);save();alert('Presupuesto especial guardado.')};
-$('remove-special').onclick=()=>{const d=$('special-date').value||selected;if(d in data.special){delete data.special[d];selected=d;save();alert('Presupuesto especial eliminado.')}else alert('Esta fecha no tiene un presupuesto especial.')};
+const money=n=>new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n||0);
+const pad=n=>String(n).padStart(2,'0');
+const dateKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=new Date();
+let selected=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+let view=new Date(today.getFullYear(),today.getMonth(),1);
+let data={expenses:{},specialBudgets:{}};
+try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&typeof saved==='object'){data.expenses=saved.expenses||{};data.specialBudgets=saved.specialBudgets||{};}}catch(e){}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){alert('No se pudieron guardar los datos. Revisa el espacio disponible del navegador.');}}
+function expensesFor(key){return Array.isArray(data.expenses[key])?data.expenses[key]:[];}
+function totalFor(key){return expensesFor(key).reduce((sum,item)=>sum+(Number(item.amount)||0),0);}
+function budgetFor(key){return Object.prototype.hasOwnProperty.call(data.specialBudgets,key)?Number(data.specialBudgets[key]):DAILY_BUDGET;}
+function renderCalendar(){
+ const cal=$('calendar');cal.innerHTML='';
+ ['Lu','Ma','Mi','Ju','Vi','Sa','Do'].forEach(day=>{const el=document.createElement('div');el.className='weekday';el.textContent=day;cal.appendChild(el);});
+ const first=new Date(view.getFullYear(),view.getMonth(),1);
+ const offset=(first.getDay()+6)%7;
+ const days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+ for(let i=0;i<offset;i++){const el=document.createElement('div');el.className='day empty';cal.appendChild(el);}
+ for(let n=1;n<=days;n++){
+  const d=new Date(view.getFullYear(),view.getMonth(),n),key=dateKey(d),total=totalFor(key),special=Object.prototype.hasOwnProperty.call(data.specialBudgets,key);
+  const el=document.createElement('button');el.type='button';el.className='day'+(key===dateKey(selected)?' selected':'')+(key===dateKey(today)?' today':'')+(special?' special':'');
+  const num=document.createElement('span');num.className='num';num.textContent=n;el.appendChild(num);
+  const amount=document.createElement('span');amount.className='daytotal';amount.textContent=total?money(total):special?'Especial':' ';el.appendChild(amount);
+  el.addEventListener('click',()=>{selected=d;render();});cal.appendChild(el);
+ }
+}
+function renderDay(){
+ const key=dateKey(selected),list=expensesFor(key),total=totalFor(key),budget=budgetFor(key),remaining=budget-total;
+ $('selectedLabel').textContent=selected.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+ $('spent').textContent=money(total);$('remaining').textContent=remaining>=0?`${money(remaining)} disponibles`:`Te pasaste por ${money(-remaining)}`;
+ $('budgetText').textContent=`de ${money(budget)}`;$('budgetType').textContent=Object.prototype.hasOwnProperty.call(data.specialBudgets,key)?'Día especial':'Presupuesto diario';
+ $('progress').style.width=(budget>0?Math.min(100,total/budget*100):total>0?100:0)+'%';$('progress').classList.toggle('over',total>budget);
+ $('status').textContent=total>budget?'Has superado el presupuesto de este día.':remaining===0?'Has utilizado todo tu presupuesto.':'Vas dentro de tu presupuesto.';
+ $('dayTitle').textContent='Gastos del '+selected.toLocaleDateString('es-CL',{day:'numeric',month:'long'});
+ const container=$('expenseList');container.innerHTML='';
+ if(!list.length){container.className='emptymsg';container.textContent='Todavía no registras gastos.';}
+ else{container.className='';list.forEach(item=>{const row=document.createElement('div');row.className='expense';const left=document.createElement('span');left.textContent=item.description;const right=document.createElement('strong');right.textContent=money(item.amount);const del=document.createElement('button');del.className='danger';del.textContent='Quitar';del.type='button';del.addEventListener('click',()=>{data.expenses[key]=expensesFor(key).filter(x=>x.id!==item.id);persist();render();});row.append(left,right,del);container.appendChild(row);});}
+ const special=Object.prototype.hasOwnProperty.call(data.specialBudgets,key);
+ $('specialToggle').checked=special;$('specialBudgetField').hidden=!special;$('specialBudget').value=special?data.specialBudgets[key]:'';
+}
+function render(){ $('monthTitle').textContent=view.toLocaleDateString('es-CL',{month:'long',year:'numeric'});renderCalendar();renderDay();}
+$('prev').addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);render();});
+$('next').addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render();});
+$('specialToggle').addEventListener('change',()=>{$('specialBudgetField').hidden=!$('specialToggle').checked;});
+$('saveBudget').addEventListener('click',()=>{
+ const key=dateKey(selected);
+ if(!$('specialToggle').checked){delete data.specialBudgets[key];persist();render();return;}
+ const val=Number($('specialBudget').value);
+ if(!Number.isFinite(val)||val<0||$('specialBudget').value===''){alert('Ingresa un presupuesto especial válido.');return;}
+ data.specialBudgets[key]=Math.round(val);persist();render();
+});
+$('clearSpecial').addEventListener('click',()=>{delete data.specialBudgets[dateKey(selected)];persist();render();});
+$('addExpense').addEventListener('click',()=>{
+ const description=$('description').value.trim(),amount=Number($('amountInput').value);
+ if(!description){alert('Escribe en qué gastaste.');$('description').focus();return;}
+ if(!Number.isFinite(amount)||amount<=0){alert('Ingresa un monto mayor que cero.');$('amountInput').focus();return;}
+ const key=dateKey(selected),list=expensesFor(key);list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),description,amount:Math.round(amount)});
+ data.expenses[key]=list;persist();$('description').value='';$('amountInput').value='';render();
+});
+$('exportData').addEventListener('click',()=>{
+ const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='respaldo-mi-dia-5000.json';a.click();URL.revokeObjectURL(url);
+});
+$('importButton').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ try{const obj=JSON.parse(await file.text());if(!obj||typeof obj.expenses!=='object'||typeof obj.specialBudgets!=='object')throw new Error('Formato no válido');
+  if(!confirm('Importar este respaldo reemplazará los datos actuales de la aplicación. ¿Continuar?'))return;
+  data={expenses:obj.expenses,specialBudgets:obj.specialBudgets};persist();render();alert('Respaldo importado correctamente.');
+ }catch(err){alert('No se pudo importar el archivo. Comprueba que sea un respaldo de Mi Día $5.000.');}
+ e.target.value='';
+});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 render();
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+})();
 </script>
-</body></html>
+</body>
+</html>
